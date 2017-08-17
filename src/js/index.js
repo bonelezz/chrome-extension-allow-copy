@@ -6,7 +6,8 @@ const events = [
   'selectstart',
   'dragstart',
   'drag',
-  'dragend'
+  'dragend',
+  'mousedown'
 ]
 events.forEach(evt =>
   document.documentElement.addEventListener(evt, e => e.stopPropagation(), {
