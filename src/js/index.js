@@ -29,4 +29,4 @@ keyEvents.forEach(evt =>
 // allow select in css
 const style = document.createElement('STYLE')
 style.innerHTML = ' * { user-select: initial !important; } '
-document.head.append(style)
+if (document.head) document.head.append(style)
