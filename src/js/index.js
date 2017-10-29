@@ -20,11 +20,7 @@ function unblock() {
   ]
   const oldPrevent = Event.prototype.preventDefault
   Event.prototype.preventDefault = function() {
-    if (indirectCopyEvents.indexOf(this.type) !== -1) {
-      console.info(
-        `[allow-copy] webpage attempting to block "${this.type}" event, ignored`
-      )
-    } else {
+    if (indirectCopyEvents.indexOf(this.type) === -1) {
       oldPrevent.apply(this, arguments)
     }
   }
