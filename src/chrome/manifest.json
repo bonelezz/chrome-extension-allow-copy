@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Allow Copy",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Allow Copy on every websites",
   "icons": {
     "16": "icon.png",
@@ -11,7 +11,7 @@
     {
       "matches": ["*://*/*"],
       "js": ["allowcopy.js"],
-      "run_at": "document_idle",
+      "run_at": "document_start",
       "all_frames": true
     }
   ],
