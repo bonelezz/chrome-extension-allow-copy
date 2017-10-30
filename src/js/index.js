@@ -38,5 +38,5 @@ try {
 const style = document.createElement('STYLE')
 style.id = 'allow-copy_style'
 style.innerHTML =
-  ' html,body,*,*::before,*::after { -webkit-user-select: initial; user-select: initial !important; } '
+  ' html,body,*,*::before,*::after { -webkit-user-select: initial !important; user-select: initial !important; } '
 document.documentElement.append(style)
