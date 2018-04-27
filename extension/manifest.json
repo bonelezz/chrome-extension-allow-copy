@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+  "name": "Allow Copy",
+  "version": "0.3.0",
+  "description": "Allow Copy on every websites",
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/inactive.png"
+    },
+    "default_title": "Allow Copy"
+  },
+  "background": {
+    "scripts": [
+      "background/proxy.js",
+      "background/config.js",
+      "background/index.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": [
+        "content_scripts/proxy.js",
+        "content_scripts/unlock.js",
+        "content_scripts/index.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "permissions": ["storage", "tabs"],
+  "author": "FallenMax@gmail.com"
+}
