@@ -1,20 +1,28 @@
 const background = (() => {
-  const updateIcon = () => {
-    const getOrigin = url => {
-      const [match, origin] = /^((https?|file):\/\/[^/]+)/.exec(url) || []
-      return origin
-    }
-    const ACTIVE_ICON = 'icons/active.png'
-    const INACTIVE_ICON = 'icons/inactive.png'
+  const ACTIVE_ICON = 'icons/active.png'
+  const INACTIVE_ICON = 'icons/inactive.png'
+
+  const getOrigin = url => {
+    const [match, origin] = /^((https?|file):\/\/[^/]+)/.exec(url) || []
+    return origin
+  }
+
+  const updateExtensionStatus = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, ([activeTab]) => {
       if (activeTab && activeTab.url) {
         const origin = getOrigin(activeTab.url)
-        configManager.getSiteConfig({ origin }).then(config => {
-          const { unlock } = config
-          chrome.browserAction.setIcon({
-            path: unlock ? ACTIVE_ICON : INACTIVE_ICON,
+        if (origin) {
+          configManager.getSiteConfig({ origin }).then(config => {
+            const { unlock } = config
+            chrome.browserAction.setIcon({
+              path: unlock ? ACTIVE_ICON : INACTIVE_ICON,
+            })
           })
-        })
+        } else {
+          chrome.browserAction.setIcon({
+            path: INACTIVE_ICON,
+          })
+        }
       } else {
         chrome.browserAction.setIcon({
           path: INACTIVE_ICON,
@@ -28,7 +36,7 @@ const background = (() => {
   })
   proxy.on('setSiteConfig', ({ origin, config }) => {
     return configManager.setSiteConfig({ origin, config }).then(result => {
-      updateIcon()
+      updateExtensionStatus()
       return result
     })
   })
@@ -40,6 +48,6 @@ const background = (() => {
       }
     })
   })
-  chrome.tabs.onActivated.addListener(updateIcon)
-  chrome.tabs.onActiveChanged.addListener(updateIcon)
+  chrome.tabs.onActivated.addListener(updateExtensionStatus)
+  chrome.tabs.onActiveChanged.addListener(updateExtensionStatus)
 })()
