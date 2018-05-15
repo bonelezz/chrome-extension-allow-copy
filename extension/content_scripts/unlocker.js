@@ -10,22 +10,11 @@ const unlocker = (() => {
       isUnlockingCached = unlock
     })
 
-    // some events are JUST for copy/cut/paste, we should protect them
-    const directCopyEvents = ['copy', 'cut', 'contextmenu', 'selectstart']
-    const rejectOtherHandlers = e => {
-      if (isUnlocking()) {
-        e.stopPropagation()
-        if (e.stopImmediatePropagation) e.stopImmediatePropagation()
-      }
-    }
-    directCopyEvents.forEach(evt => {
-      document.documentElement.addEventListener(evt, rejectOtherHandlers, {
-        capture: true,
-      })
-    })
-
-    // some events are LIKELY to be used for copy/cut/paste, we should also protect them
-    const indirectCopyEvents = [
+    const copyEvents = [
+      'copy',
+      'cut',
+      'contextmenu',
+      'selectstart',
       'mousedown',
       'mouseup',
       'mousemove',
@@ -33,14 +22,17 @@ const unlocker = (() => {
       'keypress',
       'keyup',
     ]
-    const oldPrevent = Event.prototype.preventDefault
-    Event.prototype.preventDefault = function() {
-      if (isUnlocking() && indirectCopyEvents.includes(this.type)) {
-        // do nothing, prevent it from preventDefault()
-      } else {
-        oldPrevent.apply(this, arguments)
+    const rejectOtherHandlers = e => {
+      if (isUnlocking()) {
+        e.stopPropagation()
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation()
       }
     }
+    copyEvents.forEach(evt => {
+      document.documentElement.addEventListener(evt, rejectOtherHandlers, {
+        capture: true,
+      })
+    })
   }
 
   const logger = {
