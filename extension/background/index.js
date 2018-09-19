@@ -50,4 +50,16 @@ const background = (() => {
   })
   chrome.tabs.onActivated.addListener(updateExtensionStatus)
   chrome.tabs.onActiveChanged.addListener(updateExtensionStatus)
+
+  const pruneConfigs = () => {
+    chrome.storage.local.get(null, configs => {
+      const keysToPrune = Object.keys(configs).filter(key => {
+        const value = configs[key]
+        return value && value.unlock === false
+      })
+      chrome.storage.local.remove(keysToPrune, console.log)
+    })
+  }
+
+  pruneConfigs()
 })()

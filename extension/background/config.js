@@ -11,6 +11,12 @@ const configManager = (() => {
     })
   }
 
+  const remove = key => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.remove(key, resolve)
+    })
+  }
+
   const getDefaultConfig = () => ({
     unlock: false,
   })
@@ -28,7 +34,11 @@ const configManager = (() => {
     if (!origin) {
       throw new Error('origin is required')
     } else {
-      await set(origin, config)
+      if (config.unlock) {
+        await set(origin, config)
+      } else {
+        await remove(origin)
+      }
     }
   }
 
